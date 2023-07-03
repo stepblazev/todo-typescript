@@ -1,0 +1,23 @@
+// MAIN COLORS
+$primary: #4a55a2;
+$secondary: #ffffff;
+$gray: #aaaaaa;
+// ACTION COLORS
+$addColor: rgb(0, 221, 66);
+$clearColor: rgb(255, 24, 74);
+$favoriteColor: gold;
+
+// CONTAINER
+$container_width: 1200px;
+$container_padding: 15px;
+
+// BREAKPOINTS
+$breakpoint1200: 1200px;
+$breakpoint900: 992px;
+$breakpoint700: 768px;
+$breakpoint400: 480px;
+$breakpoint300: 320px;
+
+@mixin lineHeight($fontSize) {
+	line-height: #{$fontSize * 1.5}px !important;
+}
