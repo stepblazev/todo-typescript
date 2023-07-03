@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
-@import './reset.scss';
 @import './variables';
+@import './reset.scss';
+@import './app.scss';
 
 * {
 	font-family: Roboto;
@@ -33,5 +34,21 @@
 	}
 	100% {
 		background-position: 100% 50%;
+	}
+}
+
+svg {
+	width: 20px;
+	height: 20px;
+	fill: $secondary;
+}
+
+.svg-button {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	span {
+		font-weight: 500;
 	}
 }

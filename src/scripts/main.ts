@@ -1,7 +1,4 @@
-// CONTAINER
-const _topicContainer: HTMLDivElement = document.getElementById('container') as HTMLDivElement;
+import { App } from './modules/App';
 
-// CONTROLS
-const _addButton: HTMLButtonElement = document.getElementById('add') as HTMLButtonElement;
-const _clearButton: HTMLButtonElement = document.getElementById('clear') as HTMLButtonElement;
-const _favoriteButton: HTMLInputElement = document.getElementById('favorite') as HTMLInputElement;
+const app = new App();
+console.log(app);

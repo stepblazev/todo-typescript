@@ -5,12 +5,13 @@ export interface IApp {
 	// ------------------------------
 	_container: HTMLDivElement;
 	_addButton: HTMLButtonElement;
+	_deleteButton: HTMLButtonElement;
 	_searchInput: HTMLInputElement;
-	_markedCheckbox: HTMLInputElement;
+	_markedCheck: HTMLInputElement;
 	// ------------------------------
 	Todo: ITodoStore;
 	// ------------------------------
 	initEvents: () => void;
-	render: () => void;
+	renderTopics: (topics: ITopic[]) => void;
 	renderTasks: (topic: ITopic) => void;
 }

@@ -1,0 +1,86 @@
+@keyframes jump {
+	0% {
+		transform: translateY(0px);
+	}
+	70% {
+		transform: translateY(-5px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+
+@mixin setControlButtonColor($color) {
+	&:hover {
+		svg {
+			animation: jump 0.3s linear 0s normal;
+			fill: $color;
+		}
+		div {
+			transform: translateY(-3px);
+			color: $color;
+			&::after {
+				background-color: $color;
+				width: 100%;
+			}
+		}
+	}
+}
+
+.header {
+	&__logo {
+		margin-right: 20px;
+		padding: 5px;
+		font-size: 50px;
+		line-height: 1;
+	}
+	&__controls {
+		margin-bottom: 20px;
+		display: inline-flex;
+		border-bottom: 5px solid $secondary;
+
+		#add,
+		#delete {
+			padding: 5px 15px;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			font-size: 16px;
+			line-height: 1;
+			transition: all 0.2s ease;
+
+			svg {
+				transition: fill 0.2s ease;
+			}
+
+			div {
+				position: relative;
+				transition: all 0.2s ease;
+				font-weight: 500;
+
+				&:after {
+					content: '';
+					position: absolute;
+					top: 100%;
+					left: 0;
+					width: 0;
+					height: 3px;
+					transition: all 0.3s ease;
+					border-radius: 3px;
+				}
+			}
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.048);
+			}
+		}
+
+		#add {
+			@include setControlButtonColor($addColor);
+		}
+
+		#delete {
+			@include setControlButtonColor($deleteColor);
+		}
+	}
+}
