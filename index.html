@@ -45,8 +45,32 @@
                         </button>
                     </div>
                     <div class="header__filter">
-                        <input type="search" id="search" placeholder="Search">
-                        <input type="checkbox" id="marked">
+                        <div class="header__search">
+                            <input type="search" id="search" placeholder="Search">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <g data-name="Layer 2" id="Layer_2">
+                                    <path
+                                        d="M18,10a8,8,0,1,0-3.1,6.31l6.4,6.4,1.41-1.41-6.4-6.4A8,8,0,0,0,18,10Zm-8,6a6,6,0,1,1,6-6A6,6,0,0,1,10,16Z" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="header__marked">
+                            <input type="checkbox" id="marked">
+                            <label for="marked" class="svg-button">
+                                <svg class="marked" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M34 6H14c-2.21 0-3.98 1.79-3.98 4L10 42l14-6 14 6V10c0-2.21-1.79-4-4-4zm0 30l-10-4.35L14 36V10h20v26z" />
+                                    <path d="M0 0h48v48H0z" fill="none" />
+                                </svg>
+                                <svg class="marked-checked" height="48" viewBox="0 0 48 48" width="48"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4z" />
+                                    <path d="M0 0h48v48h-48z" fill="none" />
+                                </svg>
+                                <span>Only marked</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </header>

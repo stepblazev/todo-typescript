@@ -1,15 +1,3 @@
-@keyframes jump {
-	0% {
-		transform: translateY(0px);
-	}
-	70% {
-		transform: translateY(-5px);
-	}
-	100% {
-		transform: translateY(0px);
-	}
-}
-
 @mixin setControlButtonColor($color) {
 	&:hover {
 		svg {
@@ -27,21 +15,51 @@
 	}
 }
 
+@keyframes jump {
+	0% {
+		transform: translateY(0px);
+	}
+	70% {
+		transform: translateY(-5px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+
 .header {
+	display: inline-flex;
+	flex-direction: column;
+
+	@media (max-width: $breakpoint700) {
+		display: flex;
+	}
+
 	&__logo {
+		flex-grow: 1;
 		margin-right: 20px;
 		padding: 5px;
 		font-size: 50px;
 		line-height: 1;
+
+		@media (max-width: $breakpoint700) {
+			font-size: 24px;
+			margin-right: 0;
+		}
 	}
+
 	&__controls {
-		margin-bottom: 20px;
-		display: inline-flex;
+		margin-bottom: 10px;
+		display: flex;
 		border-bottom: 5px solid $secondary;
+
+		@media (max-width: $breakpoint700) {
+			align-items: center;
+		}
 
 		#add,
 		#delete {
-			padding: 5px 15px;
+			padding: 15px;
 			display: flex;
 			align-items: center;
 			gap: 5px;
@@ -71,7 +89,10 @@
 			}
 
 			&:hover {
-				background-color: rgba(0, 0, 0, 0.048);
+				background-color: rgba(0, 0, 0, 0.05);
+			}
+			&:active {
+				background-color: rgba(0, 0, 0, 0.2);
 			}
 		}
 
@@ -81,6 +102,93 @@
 
 		#delete {
 			@include setControlButtonColor($deleteColor);
+		}
+	}
+
+	&__filter {
+		align-self: stretch;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+
+	&__marked {
+		#marked {
+			display: none;
+			&:checked + label {
+				span {
+					color: $markedColor;
+				}
+
+				.marked-checked {
+					display: block;
+					animation: jump 0.3s ease 0s normal;
+				}
+
+				.marked {
+					display: none;
+				}
+			}
+		}
+
+		#marked + label {
+			padding: 10px 15px;
+			transition: all 0.2s ease;
+			border-radius: 10px;
+			user-select: none;
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.05);
+			}
+			&:active {
+				background-color: rgba(0, 0, 0, 0.2);
+			}
+
+			.marked-checked {
+				display: none;
+				fill: $markedColor;
+			}
+		}
+	}
+
+	&__search {
+		flex-grow: 1;
+		position: relative;
+
+		#search {
+			width: 100%;
+			padding: 10px;
+			padding-left: 35px;
+			border-radius: 10px;
+			background-color: rgba(0, 0, 0, 0.1);
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			transition: all 0.2s ease;
+
+			&:focus {
+				outline: none;
+				border-color: $secondary;
+				background-color: rgba(0, 0, 0, 0.2);
+				& + svg {
+					fill: $secondary;
+				}
+			}
+
+			&::placeholder {
+				color: rgba(255, 255, 255, 0.3);
+			}
+
+			@media (max-width: $breakpoint700) {
+				width: 100%;
+			}
+		}
+
+		svg {
+			fill: rgba(255, 255, 255, 0.3);
+			position: absolute;
+			left: 10px;
+			top: 10px;
+			transition: all 0.2s ease;
 		}
 	}
 }
