@@ -1,0 +1,46 @@
+@keyframes slideInRightAnimation {
+	0% {
+		opacity: 0;
+		transform: translateX(-50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+@keyframes slideInLeftAnimation {
+	0% {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+@mixin slideInRight($delay) {
+	animation: slideInRightAnimation 0.5s ease $delay;
+}
+
+@mixin slideInLeft($delay) {
+	animation: slideInLeftAnimation 0.5s ease $delay;
+}
+
+@mixin setControlButtonColor($color) {
+	&:hover {
+		svg {
+			animation: jump 0.3s linear 0s normal;
+			fill: $color;
+		}
+		div {
+			transform: translateY(-3px);
+			color: $color;
+			&::after {
+				background-color: $color;
+				width: 100%;
+			}
+		}
+	}
+}

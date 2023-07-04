@@ -1,20 +1,3 @@
-@mixin setControlButtonColor($color) {
-	&:hover {
-		svg {
-			animation: jump 0.3s linear 0s normal;
-			fill: $color;
-		}
-		div {
-			transform: translateY(-3px);
-			color: $color;
-			&::after {
-				background-color: $color;
-				width: 100%;
-			}
-		}
-	}
-}
-
 @keyframes jump {
 	0% {
 		transform: translateY(0px);
@@ -35,6 +18,7 @@
 	font-size: 16px;
 	line-height: 1;
 	transition: all 0.2s ease;
+	@include slideInLeft(0s);
 
 	svg {
 		transition: fill 0.2s ease;
@@ -78,6 +62,7 @@
 		padding: 5px;
 		font-size: 50px;
 		line-height: 1;
+		@include slideInRight(0s);
 
 		@media (max-width: $breakpoint700) {
 			font-size: 24px;
@@ -200,44 +185,208 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 20px;
+	}
+}
 
-		.topic {
-			width: 250px;
-			transition: all 0.2s ease;
+.topic {
+	width: 250px;
+	position: relative;
+	transition: background 0.3s ease;
 
-			&__header {
-				display: flex;
-				align-items: center;
-				gap: 5px;
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		color: inherit;
+	}
+
+	&__mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.icon-marked {
+			display: none;
+		}
+
+		&.marked {
+			svg {
+				fill: $markedColor !important;
 			}
-
-			&__title {
-				flex-grow: 1;
+			.icon-not-marked {
+				display: none;
 			}
-
-			&__edit {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			&__more {
-				display: flex;
-				align-items: center;
-			}
-
-			&__line {
-				height: 3px;
-				width: 40%;
-				background-color: $secondary;
-				border-radius: 3px;
-			}
-
-			&__show-more {
-				display: flex;
-				align-items: center;
-				justify-content: center;
+			.icon-marked {
+				display: block;
 			}
 		}
+	}
+
+	&__title {
+		color: inherit;
+		flex-grow: 1;
+	}
+
+	&__edit {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&__more {
+		display: flex;
+		align-items: center;
+	}
+
+	&__line {
+		height: 3px;
+		width: 40%;
+		background-color: $secondary;
+		border-radius: 3px;
+		transition: all 0.3s ease;
+
+		&.opened {
+			flex-grow: 1;
+		}
+	}
+
+	&__show-more {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.3s ease;
+	}
+
+	&.opened {
+		border-radius: 10px 10px 0 0;
+		background-color: white !important;
+		color: $primary;
+
+		.topic__title {
+			text-align: center;
+			color: $primary;
+		}
+
+		.topic__header,
+		.topic__more {
+			svg {
+				fill: $primary;
+			}
+		}
+
+		.topic__line {
+			background-color: $primary;
+			& + button {
+				transform: rotate(45deg) scale(1.2);
+			}
+		}
+
+		.tasks {
+			height: 200px;
+			visibility: visible;
+			background-color: white;
+			border-radius: 0 0 10px 10px;
+
+			&__list {
+				li span {
+					color: $gray;
+				}
+			}
+			&__add {
+				color: $primary;
+			}
+		}
+	}
+}
+
+.tasks {
+	padding: 0 15px;
+	width: 100%;
+	height: 0;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.05);
+	visibility: hidden;
+	transition: all 0.3s ease;
+	overflow: hidden;
+
+	&__list {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+
+		li {
+			padding: 5px 0;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			user-select: none;
+			cursor: pointer;
+
+			svg {
+				min-width: 15px;
+				min-height: 15px;
+				max-width: 15px;
+				max-height: 15px;
+				fill: $gray;
+				transition: fill 0.2s ease;
+			}
+
+			span {
+				color: $gray;
+				transition: color 0.2s ease;
+			}
+
+			.icon-checked {
+				display: none;
+			}
+
+			&.checked {
+				span {
+					color: $primary !important;
+					font-weight: 700;
+				}
+
+				svg {
+					fill: $addColor;
+				}
+
+				.icon-wait {
+					display: none;
+				}
+				.icon-checked {
+					display: block;
+				}
+			}
+
+			&:hover {
+				.tasks__delete {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	&__delete {
+		color: black;
+		flex-grow: 1;
+		display: flex;
+		justify-content: end;
+		opacity: 0;
+		transition: opacity 0.2s ease;
+		svg {
+			fill: $deleteColor !important;
+		}
+	}
+
+	&__add {
+		margin-bottom: 15px;
+		font-weight: 700;
+		transition: all 0.2s ease;
 	}
 }
