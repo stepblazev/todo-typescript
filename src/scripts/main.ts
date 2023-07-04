@@ -1,3 +1,4 @@
 import { App } from './modules/App';
 
-const app = new App();
+const app: App = new App();
+console.log(app);
