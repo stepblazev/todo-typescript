@@ -1,4 +1,6 @@
+import topicIcons from '../assets/topic-icons.json';
 import { IApp } from '../models/IApp';
+import { Task } from './Task';
 import { TodoStore } from './TodoStore';
 import { Topic } from './Topic';
 
@@ -16,7 +18,7 @@ export class App implements IApp {
 
 	constructor() {
 		this.initEvents();
-		// this.renderTopics(this.Todo.topics);
+		this.renderTopics(this.Todo.topics);
 	}
 
 	initEvents() {
@@ -35,6 +37,9 @@ export class App implements IApp {
 			const search: string = this._searchInput.value;
 			const marked: boolean = this._markedCheck.checked;
 			const topicList = this.Todo.getSearched(search, marked);
+			console.log(this.Todo.topics);
+			console.log(topicList);
+
 			this.renderTopics(topicList);
 		};
 
@@ -43,23 +48,153 @@ export class App implements IApp {
 	}
 
 	renderTopics(topics: Topic[]) {
+		this._container.innerHTML = '';
 		if (topics?.length === 0) {
-			this._container.innerHTML = '';
 			this._nothingLabel.classList.add('nothing_show');
 			return;
 		} else {
 			this._nothingLabel.classList.remove('nothing_show');
 		}
+		// RENDER
 		for (let i = 0; i < topics.length; i++) {
-			console.log(topics[i]);
-			this.renderTasks(topics[i]);
+			const current: Topic = topics[i];
+
+			const topicDIV = document.createElement('div');
+			topicDIV.classList.add('topic');
+			topicDIV.classList.add('hoverable');
+
+			current.opened && topicDIV.classList.add('opened');
+			/* ================================== */
+			/* ==> */ const topicHeaderDIV = document.createElement('div');
+			/* ==> */ topicHeaderDIV.classList.add('topic__header');
+			/* ================================== */
+			/* ==========> */ const topicMarkBUTTON = document.createElement('button');
+			/* ==========> */ topicMarkBUTTON.classList.add('topic__mark');
+			/* ==========> */ current.marked && topicMarkBUTTON.classList.add('marked');
+			/* ==========> */ topicMarkBUTTON.innerHTML = `${topicIcons.iconNotMarked}${topicIcons.iconMarked}`;
+
+			topicMarkBUTTON.addEventListener('click', () => {
+				topicMarkBUTTON.classList.toggle('marked');
+				const newMarked: boolean = !current.marked;
+				current.setMarked(newMarked);
+			});
+
+			/* ================================== */
+			/* ==========> */ const topicTitleH3 = document.createElement('h3');
+			/* ==========> */ topicTitleH3.classList.add('topic__title');
+			/* ==========> */ topicTitleH3.textContent = current.title;
+			/* ================================== */
+			/* ==========> */ const topicEditBUTTON = document.createElement('button');
+			/* ==========> */ topicEditBUTTON.classList.add('topic__edit');
+			/* ==========> */ topicEditBUTTON.innerHTML = topicIcons.iconEdit;
+
+			topicEditBUTTON.addEventListener('click', () => {
+				console.log('NOT READY YET');
+			});
+
+			/* ================================== */
+			/* ==> */ topicHeaderDIV.appendChild(topicMarkBUTTON);
+			/* ==> */ topicHeaderDIV.appendChild(topicTitleH3);
+			/* ==> */ topicHeaderDIV.appendChild(topicEditBUTTON);
+			/* ================================== */
+			/* ==> */ const topicMoreDIV = document.createElement('div');
+			/* ==> */ topicMoreDIV.classList.add('topic__more');
+			/* ================================== */
+			/* ==========> */ const topicLineDIV = document.createElement('div');
+			/* ==========> */ topicLineDIV.classList.add('topic__line');
+			/* ==========> */ current.opened && topicLineDIV.classList.add('opened');
+			/* ================================== */
+			/* ==========> */ const topicShowMoreBUTTON = document.createElement('button');
+			/* ==========> */ topicShowMoreBUTTON.classList.add('topic__show-more');
+			/* ==========> */ topicShowMoreBUTTON.innerHTML = topicIcons.iconShowMore;
+
+			topicShowMoreBUTTON.addEventListener('click', () => {
+				topicDIV.classList.toggle('opened');
+				topicLineDIV.classList.toggle('opened');
+				const newOpened: boolean = !current.opened;
+				newOpened ? current.open() : current.hide();
+			});
+
+			/* ================================== */
+			/* ==> */ topicMoreDIV.appendChild(topicLineDIV);
+			/* ==> */ topicMoreDIV.appendChild(topicShowMoreBUTTON);
+			/* ================================== */
+			const tasksDIV = this.renderTasks(topics[i]);
+
+			topicDIV.appendChild(topicHeaderDIV);
+			topicDIV.appendChild(topicMoreDIV);
+			topicDIV.appendChild(tasksDIV);
+
+			this._container.appendChild(topicDIV);
 		}
 	}
 
-	renderTasks(topic: Topic) {
+	renderTasks(topic: Topic): HTMLElement {
 		const { tasks } = topic;
-		for (let j = 0; j < tasks.length; j++) {
-			console.log(tasks[j]);
+		tasks.sort((prevTask, task) => prevTask.order - task.order);
+
+		const tasksDIV = document.createElement('div');
+		tasksDIV.classList.add('tasks');
+
+		/* ================================== */
+		/* ==> */ const tasksListUL = document.createElement('ul');
+		/* ==> */ tasksListUL.classList.add('tasks__list');
+		/* ================================== */
+		for (let i = 0; i < tasks.length; i++) {
+			const current: Task = tasks[i];
+
+			/* ==========> */ const tasksLI = document.createElement('li');
+			/* ==========> */ tasksLI.innerHTML = `${topicIcons.iconWait}${topicIcons.iconChecked}<span>${tasks[i].name}</span>`;
+			/* ================================== */
+			/* ==========> */ const tasksControlsDIV = document.createElement('div');
+			/* ==========> */ tasksControlsDIV.classList.add('tasks__controls');
+			/* ================================== */
+			/* ====================> */ const tasksOrderBUTTON = document.createElement('button');
+			/* ====================> */ tasksOrderBUTTON.classList.add('tasks__order');
+			/* ====================> */ tasksOrderBUTTON.innerHTML = topicIcons.iconOrder;
+
+			tasksOrderBUTTON.addEventListener('click', () => {
+				console.log('NOT READY YET');
+			});
+
+			/* ================================== */
+			/* ====================> */ const tasksDeleteBUTTON = document.createElement('button');
+			/* ====================> */ tasksDeleteBUTTON.classList.add('tasks__delete');
+			/* ====================> */ tasksDeleteBUTTON.innerHTML = topicIcons.iconDelete;
+
+			tasksDeleteBUTTON.addEventListener('click', () => {
+				if (!confirm(`Delete task '${current.name}'?`)) return;
+			});
+
+			/* ================================== */
+			/* ==========> */ tasksControlsDIV.appendChild(tasksOrderBUTTON);
+			/* ==========> */ tasksControlsDIV.appendChild(tasksDeleteBUTTON);
+			/* ==========> */ tasksLI.appendChild(tasksControlsDIV);
+			/* ================================== */
+			tasksListUL.appendChild(tasksLI);
 		}
+		/* ================================== */
+		const tasksAddBUTTON = document.createElement('button');
+		tasksAddBUTTON.classList.add('tasks__add');
+		tasksAddBUTTON.classList.add('hoverable');
+		tasksAddBUTTON.textContent = 'New task';
+
+		tasksAddBUTTON.addEventListener('click', () => {
+			const taskName = prompt('Enter task name:');
+			if (!taskName) return;
+			this.Todo.topics = this.Todo.topics.map((t) => {
+				if (t.id !== topic.id) return t;
+				t.addTask(taskName);
+				return t;
+			});
+			this.renderTopics(this.Todo.topics);
+			return;
+		});
+
+		/* ================================== */
+		tasksDIV.appendChild(tasksListUL);
+		tasksDIV.appendChild(tasksAddBUTTON);
+
+		return tasksDIV;
 	}
 }

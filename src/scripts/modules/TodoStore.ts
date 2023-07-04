@@ -8,7 +8,7 @@ export class TodoStore implements ITodoStore {
 	getSearched(search: string, marked: boolean) {
 		const searchResult = this.topics.filter(
 			(topic) =>
-				topic.title.toLowerCase() === search.toLowerCase() &&
+				topic.title.toLowerCase().includes(search.toLowerCase()) &&
 				(marked ? topic.marked === true : true)
 		);
 		return searchResult;

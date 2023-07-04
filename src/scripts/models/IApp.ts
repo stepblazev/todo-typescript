@@ -14,5 +14,5 @@ export interface IApp {
 	// ------------------------------
 	initEvents: () => void;
 	renderTopics: (topics: ITopic[]) => void;
-	renderTasks: (topic: ITopic) => void;
+	renderTasks: (topic: ITopic) => HTMLElement;
 }

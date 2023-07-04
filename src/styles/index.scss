@@ -23,11 +23,11 @@
 	background: linear-gradient(
 		323deg,
 		rgba(203, 163, 255, 1) 0%,
-		rgba(113, 215, 183, 1) 46%,
+		rgb(113, 195, 215) 46%,
 		rgba(97, 108, 190, 1) 100%
 	);
 	background-size: 1400% 100%;
-	animation: gradientAnimation 20s ease infinite alternate;
+	animation: gradientAnimation 10s ease infinite alternate;
 }
 
 @keyframes gradientAnimation {
