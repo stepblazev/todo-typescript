@@ -10,16 +10,18 @@ export class App implements IApp {
 	) as HTMLButtonElement;
 	public _searchInput: HTMLInputElement = document.getElementById('search') as HTMLInputElement;
 	public _markedCheck: HTMLInputElement = document.getElementById('marked') as HTMLInputElement;
+	public _nothingLabel: HTMLElement = document.getElementById('nothing') as HTMLElement;
 
 	public Todo: TodoStore = new TodoStore();
 
 	constructor() {
 		this.initEvents();
+		// this.renderTopics(this.Todo.topics);
 	}
 
 	initEvents() {
 		this._addButton.addEventListener('click', () => {
-			const title: string | null = prompt('New topic:');
+			const title: string | null = prompt('New topic title:');
 			if (!title) return;
 			const topicList = this.Todo.addTopic(title);
 			this.renderTopics(topicList);
@@ -41,6 +43,13 @@ export class App implements IApp {
 	}
 
 	renderTopics(topics: Topic[]) {
+		if (topics?.length === 0) {
+			this._container.innerHTML = '';
+			this._nothingLabel.classList.add('nothing_show');
+			return;
+		} else {
+			this._nothingLabel.classList.remove('nothing_show');
+		}
 		for (let i = 0; i < topics.length; i++) {
 			console.log(topics[i]);
 			this.renderTasks(topics[i]);

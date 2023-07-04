@@ -8,6 +8,7 @@ export interface IApp {
 	_deleteButton: HTMLButtonElement;
 	_searchInput: HTMLInputElement;
 	_markedCheck: HTMLInputElement;
+	_nothingLabel: HTMLElement;
 	// ------------------------------
 	Todo: ITodoStore;
 	// ------------------------------

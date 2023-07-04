@@ -27,13 +27,50 @@
 	}
 }
 
-.header {
-	display: inline-flex;
-	flex-direction: column;
+#add,
+#delete {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 16px;
+	line-height: 1;
+	transition: all 0.2s ease;
 
-	@media (max-width: $breakpoint700) {
-		display: flex;
+	svg {
+		transition: fill 0.2s ease;
 	}
+
+	div {
+		position: relative;
+		transition: all 0.2s ease;
+		font-weight: 500;
+
+		&:after {
+			content: '';
+			position: absolute;
+			top: 100%;
+			left: 0;
+			width: 0;
+			height: 3px;
+			transition: all 0.3s ease;
+			border-radius: 3px;
+		}
+	}
+}
+
+#add {
+	margin-right: 10px;
+	@include setControlButtonColor($addColor);
+}
+
+#delete {
+	@include setControlButtonColor($deleteColor);
+}
+
+.header {
+	margin-bottom: 50px;
+	display: flex;
+	flex-direction: column;
 
 	&__logo {
 		flex-grow: 1;
@@ -52,56 +89,11 @@
 		margin-bottom: 10px;
 		display: flex;
 		border-bottom: 5px solid $secondary;
+		align-items: center;
 
 		@media (max-width: $breakpoint700) {
+			padding: 10px 0;
 			align-items: center;
-		}
-
-		#add,
-		#delete {
-			padding: 15px;
-			display: flex;
-			align-items: center;
-			gap: 5px;
-			font-size: 16px;
-			line-height: 1;
-			transition: all 0.2s ease;
-
-			svg {
-				transition: fill 0.2s ease;
-			}
-
-			div {
-				position: relative;
-				transition: all 0.2s ease;
-				font-weight: 500;
-
-				&:after {
-					content: '';
-					position: absolute;
-					top: 100%;
-					left: 0;
-					width: 0;
-					height: 3px;
-					transition: all 0.3s ease;
-					border-radius: 3px;
-				}
-			}
-
-			&:hover {
-				background-color: rgba(0, 0, 0, 0.05);
-			}
-			&:active {
-				background-color: rgba(0, 0, 0, 0.2);
-			}
-		}
-
-		#add {
-			@include setControlButtonColor($addColor);
-		}
-
-		#delete {
-			@include setControlButtonColor($deleteColor);
 		}
 	}
 
@@ -132,18 +124,9 @@
 		}
 
 		#marked + label {
-			padding: 10px 15px;
 			transition: all 0.2s ease;
-			border-radius: 10px;
 			user-select: none;
 			cursor: pointer;
-
-			&:hover {
-				background-color: rgba(0, 0, 0, 0.05);
-			}
-			&:active {
-				background-color: rgba(0, 0, 0, 0.2);
-			}
 
 			.marked-checked {
 				display: none;
@@ -189,6 +172,72 @@
 			left: 10px;
 			top: 10px;
 			transition: all 0.2s ease;
+		}
+	}
+}
+
+.main {
+	#nothing {
+		display: none;
+		align-items: center;
+		gap: 10px;
+		svg {
+			width: 30px;
+			height: 30px;
+		}
+		span {
+			font-size: 24px;
+			line-height: 1;
+			font-weight: 200;
+		}
+
+		&.nothing_show {
+			display: flex;
+		}
+	}
+
+	&__topic-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+
+		.topic {
+			width: 250px;
+			transition: all 0.2s ease;
+
+			&__header {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+
+			&__title {
+				flex-grow: 1;
+			}
+
+			&__edit {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			&__more {
+				display: flex;
+				align-items: center;
+			}
+
+			&__line {
+				height: 3px;
+				width: 40%;
+				background-color: $secondary;
+				border-radius: 3px;
+			}
+
+			&__show-more {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 		}
 	}
 }
