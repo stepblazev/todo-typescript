@@ -12,43 +12,38 @@ export class Topic implements ITopic {
 		this.title = title;
 	}
 
-	open() {
+	public open() {
 		this.opened = true;
 	}
 
-	hide() {
+	public hide() {
 		this.opened = false;
 	}
 
-	setMarked(marked: boolean) {
+	public setMarked(marked: boolean) {
 		this.marked = marked;
 	}
 
-	addTask(name: string) {
+	public addTask(name: string) {
 		const order: number = this.tasks.length;
 		const newTask: Task = new Task(name, order);
 		this.tasks.push(newTask);
 		return this.tasks;
 	}
 
-	deleteTask(order: number) {
+	public deleteTask(order: number) {
 		this.tasks = this.tasks.filter((task) => task.order != order);
 		return this.tasks;
 	}
 
-	decreaseTaskOrder(order: number) {
-		if (order === 0) return this.tasks;
-		this.tasks.forEach((t) => {
-			if (t.order === order) {
-				t.decreaseOrder();
-			} else if (t.order === order - 1) {
-				t.increaseOrder();
-			}
-		});
-		return this.tasks;
+	public decreaseTaskOrder(task: Task) {
+		if (task.order === 0) return this.tasks;
+		this.tasks.find((t) => t.order === task.order - 1)?.increaseOrder();
+		task.decreaseOrder();
+		return this.tasks.sort((prevTask, curTask) => prevTask.order - curTask.order);
 	}
 
-	rename(title: string) {
+	public rename(title: string) {
 		this.title = title;
 	}
 }

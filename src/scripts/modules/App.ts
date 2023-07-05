@@ -47,16 +47,14 @@ export class App implements IApp {
 
 	renderTopics(topics: Topic[]) {
 		this._container.innerHTML = '';
-		if (topics?.length === 0) {
-			this._nothingLabel.classList.add('nothing_show');
-			return;
+
+		if (!topics?.length) {
+			return this._nothingLabel.classList.add('nothing_show');
 		} else {
 			this._nothingLabel.classList.remove('nothing_show');
 		}
-		// RENDER
-		for (let i = 0; i < topics.length; i++) {
-			const current: Topic = topics[i];
 
+		for (let current of topics) {
 			const topicDIV = document.createElement('div');
 			topicDIV.classList.add('topic');
 			topicDIV.classList.add('hoverable');
@@ -72,6 +70,7 @@ export class App implements IApp {
 			/* ==========> */ current.marked && topicMarkBUTTON.classList.add('marked');
 			/* ==========> */ topicMarkBUTTON.innerHTML = `${topicIcons.iconNotMarked}${topicIcons.iconMarked}`;
 
+			// NOTE MARK TOPIC EVENT
 			topicMarkBUTTON.addEventListener('click', () => {
 				topicMarkBUTTON.classList.toggle('marked');
 				const newMarked: boolean = !current.marked;
@@ -87,6 +86,7 @@ export class App implements IApp {
 			/* ==========> */ topicEditBUTTON.classList.add('topic__edit');
 			/* ==========> */ topicEditBUTTON.innerHTML = topicIcons.iconEdit;
 
+			// NOTE EDIT MENU EVENT
 			topicEditBUTTON.addEventListener('click', () => {
 				console.log('NOT READY YET');
 			});
@@ -107,6 +107,7 @@ export class App implements IApp {
 			/* ==========> */ topicShowMoreBUTTON.classList.add('topic__show-more');
 			/* ==========> */ topicShowMoreBUTTON.innerHTML = topicIcons.iconShowMore;
 
+			// NOTE SHOWE MORE EVENT
 			topicShowMoreBUTTON.addEventListener('click', () => {
 				topicDIV.classList.toggle('opened');
 				topicLineDIV.classList.toggle('opened');
@@ -118,7 +119,7 @@ export class App implements IApp {
 			/* ==> */ topicMoreDIV.appendChild(topicLineDIV);
 			/* ==> */ topicMoreDIV.appendChild(topicShowMoreBUTTON);
 			/* ================================== */
-			const tasksDIV = this.renderTasks(topics[i]);
+			const tasksDIV = this.renderTasks(current);
 
 			topicDIV.appendChild(topicHeaderDIV);
 			topicDIV.appendChild(topicMoreDIV);
@@ -130,7 +131,6 @@ export class App implements IApp {
 
 	renderTasks(topic: Topic): HTMLElement {
 		const { tasks } = topic;
-		tasks.sort((prevTask, task) => prevTask.order - task.order);
 
 		const tasksDIV = document.createElement('div');
 		tasksDIV.classList.add('tasks');
@@ -152,12 +152,9 @@ export class App implements IApp {
 			/* ====================> */ tasksOrderBUTTON.classList.add('tasks__order');
 			/* ====================> */ tasksOrderBUTTON.innerHTML = topicIcons.iconOrder;
 
+			// NOTE CHANGE TASK ORDER EVENT
 			tasksOrderBUTTON.addEventListener('click', () => {
-				this.Todo.topics.forEach((t) => {
-					if (t.id !== topic.id) return t;
-					t.decreaseTaskOrder(current.order);
-					return t;
-				});
+				topic.decreaseTaskOrder(current);
 				this.renderTopics(this.Todo.topics);
 			});
 
@@ -166,13 +163,10 @@ export class App implements IApp {
 			/* ====================> */ tasksDeleteBUTTON.classList.add('tasks__delete');
 			/* ====================> */ tasksDeleteBUTTON.innerHTML = topicIcons.iconDelete;
 
+			// NOTE DELETE TASK EVENT
 			tasksDeleteBUTTON.addEventListener('click', () => {
 				if (!confirm(`Delete task '${current.name}'?`)) return;
-				this.Todo.topics.forEach((t) => {
-					if (t.id !== topic.id) return t;
-					t.deleteTask(current.order);
-					return t;
-				});
+				topic.deleteTask(current.order);
 				this.renderTopics(this.Todo.topics);
 			});
 
@@ -189,14 +183,11 @@ export class App implements IApp {
 		tasksAddBUTTON.classList.add('hoverable');
 		tasksAddBUTTON.textContent = 'New task';
 
+		// NOTE ADD NEW TASK EVENT
 		tasksAddBUTTON.addEventListener('click', () => {
 			const taskName = prompt('Enter task name:');
 			if (!taskName) return;
-			this.Todo.topics.forEach((t) => {
-				if (t.id !== topic.id) return t;
-				t.addTask(taskName);
-				return t;
-			});
+			topic.addTask(taskName);
 			this.renderTopics(this.Todo.topics);
 		});
 

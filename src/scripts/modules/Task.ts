@@ -5,15 +5,15 @@ export class Task implements ITask {
 
 	constructor(public name: string, public order: number) {}
 
-	increaseOrder() {
+	public increaseOrder() {
 		this.order += 1;
 	}
 
-	decreaseOrder() {
+	public decreaseOrder() {
 		this.order -= 1;
 	}
 
-	setCompleted(completed: boolean) {
+	public setCompleted(completed: boolean) {
 		this.completed = completed;
 	}
 }

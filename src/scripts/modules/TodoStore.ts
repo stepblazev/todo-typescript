@@ -6,7 +6,7 @@ export class TodoStore implements ITodoStore {
 
 	constructor() {}
 
-	getSearched(search: string, marked: boolean) {
+	public getSearched(search: string, marked: boolean) {
 		const searchResult = this.topics.filter(
 			(topic) =>
 				topic.title.toLowerCase().includes(search.toLowerCase()) &&
@@ -15,22 +15,22 @@ export class TodoStore implements ITodoStore {
 		return searchResult;
 	}
 
-	addTopic(title: string) {
+	public addTopic(title: string) {
 		const newTopic: Topic = new Topic(title);
 		this.topics = [newTopic, ...this.topics];
 		return this.topics;
 	}
 
-	deleteTopic(id: number) {
+	public deleteTopic(id: number) {
 		this.topics = this.topics.filter((topic) => topic.id != id);
 		return this.topics;
 	}
 
-	hideAll() {
+	public hideAll() {
 		this.topics.forEach((topic) => topic.hide());
 	}
 
-	deleteAll() {
+	public deleteAll() {
 		this.topics = [];
 	}
 }
