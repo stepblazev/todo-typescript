@@ -1,9 +1,10 @@
-// import template from '../assets/template.json';
 import { ITodoStore } from '../models/ITodoStore';
 import { Topic } from './Topic';
 
 export class TodoStore implements ITodoStore {
 	public topics: Topic[] = [];
+
+	constructor() {}
 
 	getSearched(search: string, marked: boolean) {
 		const searchResult = this.topics.filter(
@@ -16,13 +17,17 @@ export class TodoStore implements ITodoStore {
 
 	addTopic(title: string) {
 		const newTopic: Topic = new Topic(title);
-		this.topics.push(newTopic);
+		this.topics = [newTopic, ...this.topics];
 		return this.topics;
 	}
 
 	deleteTopic(id: number) {
 		this.topics = this.topics.filter((topic) => topic.id != id);
 		return this.topics;
+	}
+
+	hideAll() {
+		this.topics.forEach((topic) => topic.hide());
 	}
 
 	deleteAll() {

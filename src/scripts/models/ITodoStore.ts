@@ -7,4 +7,5 @@ export interface ITodoStore {
 	addTopic: (title: string) => ITopic[];
 	deleteTopic: (id: number) => ITopic[];
 	deleteAll: () => void;
+	hideAll: () => void;
 }

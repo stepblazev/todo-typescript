@@ -12,5 +12,6 @@ export interface ITopic {
 	setMarked: (marked: boolean) => void;
 	addTask: (name: string) => ITask[];
 	deleteTask: (order: number) => ITask[];
+	decreaseTaskOrder: (order: number) => ITask[];
 	rename: (newName: string) => void;
 }

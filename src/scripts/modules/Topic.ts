@@ -36,6 +36,18 @@ export class Topic implements ITopic {
 		return this.tasks;
 	}
 
+	decreaseTaskOrder(order: number) {
+		if (order === 0) return this.tasks;
+		this.tasks.forEach((t) => {
+			if (t.order === order) {
+				t.decreaseOrder();
+			} else if (t.order === order - 1) {
+				t.increaseOrder();
+			}
+		});
+		return this.tasks;
+	}
+
 	rename(title: string) {
 		this.title = title;
 	}

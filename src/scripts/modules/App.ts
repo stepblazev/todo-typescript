@@ -37,9 +37,7 @@ export class App implements IApp {
 			const search: string = this._searchInput.value;
 			const marked: boolean = this._markedCheck.checked;
 			const topicList = this.Todo.getSearched(search, marked);
-			console.log(this.Todo.topics);
-			console.log(topicList);
-
+			this.Todo.hideAll();
 			this.renderTopics(topicList);
 		};
 
@@ -62,6 +60,7 @@ export class App implements IApp {
 			const topicDIV = document.createElement('div');
 			topicDIV.classList.add('topic');
 			topicDIV.classList.add('hoverable');
+			topicDIV.setAttribute('data-topic-id', current.id.toString());
 
 			current.opened && topicDIV.classList.add('opened');
 			/* ================================== */
@@ -154,7 +153,12 @@ export class App implements IApp {
 			/* ====================> */ tasksOrderBUTTON.innerHTML = topicIcons.iconOrder;
 
 			tasksOrderBUTTON.addEventListener('click', () => {
-				console.log('NOT READY YET');
+				this.Todo.topics.forEach((t) => {
+					if (t.id !== topic.id) return t;
+					t.decreaseTaskOrder(current.order);
+					return t;
+				});
+				this.renderTopics(this.Todo.topics);
 			});
 
 			/* ================================== */
@@ -164,6 +168,12 @@ export class App implements IApp {
 
 			tasksDeleteBUTTON.addEventListener('click', () => {
 				if (!confirm(`Delete task '${current.name}'?`)) return;
+				this.Todo.topics.forEach((t) => {
+					if (t.id !== topic.id) return t;
+					t.deleteTask(current.order);
+					return t;
+				});
+				this.renderTopics(this.Todo.topics);
 			});
 
 			/* ================================== */
@@ -182,13 +192,12 @@ export class App implements IApp {
 		tasksAddBUTTON.addEventListener('click', () => {
 			const taskName = prompt('Enter task name:');
 			if (!taskName) return;
-			this.Todo.topics = this.Todo.topics.map((t) => {
+			this.Todo.topics.forEach((t) => {
 				if (t.id !== topic.id) return t;
 				t.addTask(taskName);
 				return t;
 			});
 			this.renderTopics(this.Todo.topics);
-			return;
 		});
 
 		/* ================================== */
