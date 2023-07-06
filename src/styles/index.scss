@@ -64,6 +64,7 @@ svg {
 .hoverable {
 	padding: 10px 15px;
 	border-radius: 10px;
+	transition: all 0.2s ease;
 
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.05);

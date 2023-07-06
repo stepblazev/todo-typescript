@@ -28,7 +28,11 @@ export class Topic implements ITopic {
 		this.update();
 	}
 
-	constructor(public title: string) {
+	constructor(
+		public title: string,
+		private hideAllCallback: (id: number) => void,
+		private deleteCallback: (id: number) => void
+	) {
 		this._root.classList.add('topic');
 		this._root.setAttribute('data-topic-id', this.id.toString());
 		this.render();
@@ -36,56 +40,36 @@ export class Topic implements ITopic {
 
 	public addTask(name: string) {
 		const order: number = this.tasks.length;
-		const newTask: Task = new Task(name, order);
+		const newTask: Task = new Task(
+			name,
+			order,
+			() => {
+				this.tasks.find((t) => t.order === order - 1)?.increaseOrder();
+				this.tasks.sort((prevTask, curTask) => prevTask.order - curTask.order);
+				this.renderTasks();
+			},
+			() => {
+				this.tasks = this.tasks.filter((t) => t.order !== order);
+			}
+		);
 		this.tasks.push(newTask);
-		return this.tasks;
-	}
-
-	public deleteTask(order: number) {
-		this.tasks = this.tasks.filter((task) => task.order != order);
-		return this.tasks;
-	}
-
-	public decreaseTaskOrder(task: Task) {
-		if (task.order === 0) return this.tasks;
-		this.tasks.find((t) => t.order === task.order - 1)?.increaseOrder();
-		task.decreaseOrder();
-		return this.tasks.sort((prevTask, curTask) => prevTask.order - curTask.order);
 	}
 
 	private render() {
 		this._root.innerHTML = ` 
             <div class="topic__header">
-				<button class="topic__mark">
+				<button class="topic__mark hoverable">
 					${topicIcons.iconNotMarked} ${topicIcons.iconMarked}
 				</button>
 				<h3 class="topic__title">${this.title}</h3>
-				<button class="topic__edit">${topicIcons.iconDelete}</button>
+				<button class="topic__edit hoverable">${topicIcons.iconDelete}</button>
 			</div>
 			<div class="topic__more">
 				<div class="topic__line ${this.opened ? 'opened' : ''}"></div>
 				<button class="topic__show-more">${topicIcons.iconShowMore}</button>
 			</div>
 			<div class="tasks">
-				<ul class="tasks__list">
-					${this.tasks
-						.map(
-							(task) =>
-								`<li>
-									${topicIcons.iconWait} ${topicIcons.iconChecked}
-									<span>${task.name}</span>
-									<div class="tasks__controls">
-										<button class="tasks__order">
-											${topicIcons.iconOrder}
-										</button>
-										<button class="tasks__delete">
-											${topicIcons.iconDelete}
-										</button>
-									</div>
-								</li>`
-						)
-						.join('')}
-				</ul>
+				<ul class="tasks__list"></ul>
 				<button class="tasks__add hoverable">New task</button>
 			</div>`;
 
@@ -100,13 +84,16 @@ export class Topic implements ITopic {
 
 		const editBUTTON: HTMLElement = this._root.querySelector('.topic__edit') as HTMLElement;
 		editBUTTON.addEventListener('click', () => {
-			console.log('NOT READY YET');
+			if (!confirm(`Delete topic "${this.title}"?`)) return;
+			this._root.remove();
+			this.deleteCallback(this.id);
 		});
 
 		const moreBUTTON: HTMLElement = this._root.querySelector(
 			'.topic__show-more'
 		) as HTMLElement;
 		moreBUTTON.addEventListener('click', () => {
+			this.hideAllCallback(this.id);
 			this.Opened = !this.Opened;
 		});
 
@@ -114,8 +101,7 @@ export class Topic implements ITopic {
 		addBUTTON.addEventListener('click', () => {
 			const name = prompt('Enter task name:');
 			if (!name) return;
-			const newTask: Task = new Task(name, this.tasks.length);
-			this.tasks.push(newTask);
+			this.addTask(name);
 		});
 	}
 
@@ -138,5 +124,10 @@ export class Topic implements ITopic {
 		} else {
 			markBUTTON!.classList.contains('marked') && markBUTTON!.classList.remove('marked');
 		}
+	}
+
+	private renderTasks() {
+		const _container = this._root.querySelector('.tasks__list');
+		this.tasks.forEach((t) => _container!.append(t._root));
 	}
 }

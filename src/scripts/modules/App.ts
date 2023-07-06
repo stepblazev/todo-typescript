@@ -1,6 +1,4 @@
-import topicIcons from '../assets/topic-icons.json';
 import { IApp } from '../models/IApp';
-import { Task } from './Task';
 import { TodoStore } from './TodoStore';
 import { Topic } from './Topic';
 
@@ -18,10 +16,10 @@ export class App implements IApp {
 
 	constructor() {
 		this.initEvents();
-		// this.renderTopics(this.Todo.topics);
+		this.renderTopics(this.Todo.topics);
 	}
 
-	initEvents() {
+	public initEvents() {
 		this._addButton.addEventListener('click', () => {
 			const title: string | null = prompt('New topic title:');
 			if (!title) return;
@@ -46,7 +44,7 @@ export class App implements IApp {
 		this._container.addEventListener('load', getFiltered);
 	}
 
-	renderTopics(topics: Topic[]) {
+	public renderTopics(topics: Topic[]) {
 		this._container.innerHTML = '';
 
 		if (!topics?.length) {

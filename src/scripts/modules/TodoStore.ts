@@ -14,19 +14,22 @@ export class TodoStore implements ITodoStore {
 	}
 
 	public addTopic(title: string) {
-		const newTopic: Topic = new Topic(title);
-		// newTopic._root.style.zIndex = `${100 + this.topics.length}`;
+		const newTopic: Topic = new Topic(
+			title,
+			(id: number) => {
+				this.topics.forEach((topic) => {
+					if (topic.id !== id) topic.Opened = false;
+				});
+			},
+			(id: number) => {
+				this.topics = this.topics.filter((t) => t.id !== id);
+			}
+		);
 		this.topics.push(newTopic);
 		return newTopic._root;
 	}
 
 	public deleteAll() {
 		this.topics = [];
-	}
-
-	public hideAll() {
-		this.topics.forEach((topic) => {
-			topic.Opened = false;
-		});
 	}
 }

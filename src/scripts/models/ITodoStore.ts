@@ -6,5 +6,4 @@ export interface ITodoStore {
 	getSearched: (search: string, marked: boolean) => ITopic[];
 	addTopic: (title: string) => HTMLElement;
 	deleteAll: () => void;
-	hideAll: () => void;
 }

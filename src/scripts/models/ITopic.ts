@@ -9,7 +9,5 @@ export interface ITopic {
 	Opened: boolean;
 	Marked: boolean;
 
-	addTask: (name: string) => ITask[];
-	deleteTask: (order: number) => ITask[];
-	decreaseTaskOrder: (task: ITask) => ITask[];
+	addTask: (name: string) => void;
 }

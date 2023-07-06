@@ -1,8 +1,10 @@
 export interface ITask {
+	_root: HTMLElement;
+
 	name: string;
-	completed: boolean;
 	order: number;
-	// ------------------------------
+	Completed: boolean;
+
 	increaseOrder: () => void;
 	decreaseOrder: () => void;
 	setCompleted: (completed: boolean) => void;
