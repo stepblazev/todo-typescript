@@ -191,7 +191,6 @@ $topicListGap: 20px;
 }
 
 .topic {
-	@include slideInTop(0s);
 	padding: 10px 15px;
 	flex-basis: calc(33.333% - $topicListGap / 1.5);
 	position: relative;

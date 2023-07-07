@@ -1,5 +1,4 @@
-import { ITodoStore } from './ITodoStore';
-import { ITopic } from './ITopic';
+import { Topic } from '../modules/Topic';
 
 export interface IApp {
 	_container: HTMLDivElement;
@@ -9,8 +8,5 @@ export interface IApp {
 	_markedCheck: HTMLInputElement;
 	_nothingLabel: HTMLElement;
 
-	Todo: ITodoStore;
-
-	initEvents: () => void;
-	renderTopics: (topics: ITopic[]) => void;
+	topics: Topic[];
 }

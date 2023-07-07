@@ -6,33 +6,17 @@ export class Task implements ITask {
 
 	private completed: boolean = false;
 
-	public get Completed(): boolean {
+	public get Completed() {
 		return this.completed;
 	}
+
 	public set Completed(value: boolean) {
 		this.completed = value;
 		this.update();
 	}
 
-	constructor(
-		public name: string,
-		public order: number,
-		private orderCallback: () => void,
-		private deleteCallback: () => void
-	) {
+	constructor(public name: string) {
 		this.render();
-	}
-
-	public increaseOrder() {
-		this.order += 1;
-	}
-
-	public decreaseOrder() {
-		this.order -= 1;
-	}
-
-	public setCompleted(completed: boolean) {
-		this.completed = completed;
 	}
 
 	private render() {
@@ -53,22 +37,18 @@ export class Task implements ITask {
 		});
 
 		this._root.querySelector('.tasks__order')?.addEventListener('click', () => {
-			if (this.order === 0) return;
-			this.decreaseOrder();
-			this.orderCallback();
+			// upping the order
 		});
 
 		this._root.querySelector('.tasks__delete')?.addEventListener('click', () => {
+			if (!confirm(`Delete task "${this.name}"?`)) return;
 			this._root.remove();
-			this.deleteCallback();
 		});
 	}
 
 	private update() {
-		if (this.Completed) {
-			this._root.classList.contains('checked') || this._root.classList.add('checked');
-		} else {
-			this._root.classList.contains('checked') && this._root.classList.remove('checked');
-		}
+		this.completed
+			? this._root.classList.add('checked')
+			: this._root.classList.remove('checked');
 	}
 }

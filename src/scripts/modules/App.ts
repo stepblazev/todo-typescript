@@ -1,5 +1,4 @@
 import { IApp } from '../models/IApp';
-import { TodoStore } from './TodoStore';
 import { Topic } from './Topic';
 
 export class App implements IApp {
@@ -12,47 +11,83 @@ export class App implements IApp {
 	public _markedCheck: HTMLInputElement = document.getElementById('marked') as HTMLInputElement;
 	public _nothingLabel: HTMLElement = document.getElementById('nothing') as HTMLElement;
 
-	public Todo: TodoStore = new TodoStore();
+	public topics: Topic[] = [];
 
 	constructor() {
 		this.initEvents();
-		this.renderTopics(this.Todo.topics);
+		this.renderTopics(this.getFiltered());
 	}
 
-	public initEvents() {
+	private getFiltered(): Topic[] {
+		const search: string = this._searchInput.value;
+		const marked: boolean = this._markedCheck.checked;
+		const filteredTopics = this.topics.filter(
+			(topic) =>
+				topic.title.toLowerCase().includes(search.toLowerCase()) &&
+				(marked ? topic.Marked === true : true)
+		);
+		return filteredTopics;
+	}
+
+	private initEvents() {
 		this._addButton.addEventListener('click', () => {
 			const title: string | null = prompt('New topic title:');
 			if (!title) return;
-			const newTopic = this.Todo.addTopic(title);
-			this._container.prepend(newTopic);
+
+			const exists: Topic | undefined = this.topics.find(
+				(topic) => topic.title.toLowerCase() === title.toLowerCase()
+			);
+			if (exists) return alert('Topic with the same name already exists');
+
+			const newTopic = new Topic(title);
+			this.topics.unshift(newTopic);
+			this.renderTopics(this.getFiltered());
 		});
 		this._deleteButton.addEventListener('click', () => {
 			if (!confirm('Clear the topic list?')) return;
-			this.Todo.deleteAll();
+			this.topics = [];
 			this.renderTopics([]);
 		});
 
-		const getFiltered = () => {
-			const search: string = this._searchInput.value;
-			const marked: boolean = this._markedCheck.checked;
-			const topicList = this.Todo.getSearched(search, marked);
-			this.renderTopics(topicList);
-		};
-
-		this._searchInput.addEventListener('input', getFiltered);
-		this._markedCheck.addEventListener('change', getFiltered);
-		this._container.addEventListener('load', getFiltered);
+		this._searchInput.addEventListener('input', () => {
+			this.renderTopics(this.getFiltered());
+		});
+		this._markedCheck.addEventListener('change', () => {
+			this.renderTopics(this.getFiltered());
+		});
 	}
 
-	public renderTopics(topics: Topic[]) {
+	private renderTopics(topics: Topic[]) {
 		this._container.innerHTML = '';
+		this.checkLength(topics);
 
+		topics.forEach((topic, index) => {
+			topic._root.querySelector('.topic__mark')?.addEventListener('click', () => {
+				this.renderTopics(this.getFiltered());
+			});
+
+			topic._root.querySelector('.topic__edit')?.addEventListener('click', () => {
+				if (!confirm(`Delete topic "${topic.title}"?`)) return;
+				topic._root.remove();
+				this.topics.splice(index, 1);
+			});
+
+			topic._root.querySelector('.topic__show-more')?.addEventListener('click', () => {
+				this.topics.forEach((subTopic, subIndex) => {
+					if (index === subIndex) return;
+					subTopic.Opened = false;
+				});
+			});
+
+			this._container.append(topic._root);
+		});
+	}
+
+	private checkLength(topics: Topic[]) {
 		if (!topics?.length) {
 			return this._nothingLabel.classList.add('nothing_show');
 		} else {
 			this._nothingLabel.classList.remove('nothing_show');
 		}
-
-		topics.forEach((topic) => this._container.append(topic._root));
 	}
 }
