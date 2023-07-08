@@ -1,3 +1,4 @@
+import { TOPIC_TITLE_LIMIT } from '../config';
 import { IApp } from '../models/IApp';
 import { Topic } from './Topic';
 
@@ -34,15 +35,19 @@ export class App implements IApp {
 			const title: string | null = prompt('New topic title:');
 			if (!title) return;
 
+			const reducedTitle = title.slice(0, TOPIC_TITLE_LIMIT);
 			const exists: Topic | undefined = this.topics.find(
-				(topic) => topic.title.toLowerCase() === title.toLowerCase()
+				(topic) => topic.title.toLowerCase() === reducedTitle.toLowerCase()
 			);
 			if (exists) return alert('Topic with the same name already exists');
 
-			const newTopic = new Topic(title);
+			const newTopic = new Topic(reducedTitle);
 			this.topics.unshift(newTopic);
+
+			this.initTopicEvents(newTopic);
 			this.renderTopics(this.getFiltered());
 		});
+
 		this._deleteButton.addEventListener('click', () => {
 			if (!confirm('Clear the topic list?')) return;
 			this.topics = [];
@@ -52,6 +57,7 @@ export class App implements IApp {
 		this._searchInput.addEventListener('input', () => {
 			this.renderTopics(this.getFiltered());
 		});
+
 		this._markedCheck.addEventListener('change', () => {
 			this.renderTopics(this.getFiltered());
 		});
@@ -59,35 +65,36 @@ export class App implements IApp {
 
 	private renderTopics(topics: Topic[]) {
 		this._container.innerHTML = '';
-		this.checkLength(topics);
 
-		topics.forEach((topic, index) => {
-			topic._root.querySelector('.topic__mark')?.addEventListener('click', () => {
-				this.renderTopics(this.getFiltered());
-			});
-
-			topic._root.querySelector('.topic__edit')?.addEventListener('click', () => {
-				if (!confirm(`Delete topic "${topic.title}"?`)) return;
-				topic._root.remove();
-				this.topics.splice(index, 1);
-			});
-
-			topic._root.querySelector('.topic__show-more')?.addEventListener('click', () => {
-				this.topics.forEach((subTopic, subIndex) => {
-					if (index === subIndex) return;
-					subTopic.Opened = false;
-				});
-			});
-
-			this._container.append(topic._root);
-		});
-	}
-
-	private checkLength(topics: Topic[]) {
 		if (!topics?.length) {
 			return this._nothingLabel.classList.add('nothing_show');
 		} else {
 			this._nothingLabel.classList.remove('nothing_show');
 		}
+
+		topics.forEach((topic) => {
+			this._container.append(topic._root);
+		});
+	}
+
+	private initTopicEvents(topic: Topic) {
+		topic._root.querySelector('.topic__mark')?.addEventListener('click', () => {
+			this.renderTopics(this.getFiltered());
+		});
+
+		topic._root.querySelector('.topic__edit')?.addEventListener('click', () => {
+			if (!confirm(`Delete topic "${topic.title}"?`)) return;
+			topic._root.remove();
+			const topicIndex = this.topics.findIndex((t) => t.title === topic.title);
+			this.topics.splice(topicIndex, 1);
+			this.renderTopics(this.getFiltered());
+		});
+
+		topic._root.querySelector('.topic__show-more')?.addEventListener('click', () => {
+			this.topics.forEach((subTopic) => {
+				if (topic.title === subTopic.title) return;
+				subTopic.Opened = false;
+			});
+		});
 	}
 }

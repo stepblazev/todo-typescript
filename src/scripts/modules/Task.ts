@@ -24,7 +24,6 @@ export class Task implements ITask {
 			${topicIcons.iconWait} ${topicIcons.iconChecked}
 			<span>${this.name}</span>
 			<div class="tasks__controls">
-				<button class="tasks__order">${topicIcons.iconOrder}</button>
 				<button class="tasks__delete">${topicIcons.iconDelete}</button>
 			</div>`;
 
@@ -35,14 +34,8 @@ export class Task implements ITask {
 		this._root.addEventListener('click', () => {
 			this.Completed = !this.Completed;
 		});
-
-		this._root.querySelector('.tasks__order')?.addEventListener('click', () => {
-			// upping the order
-		});
-
 		this._root.querySelector('.tasks__delete')?.addEventListener('click', () => {
-			if (!confirm(`Delete task "${this.name}"?`)) return;
-			this._root.remove();
+			// DELETING THE TASK
 		});
 	}
 
