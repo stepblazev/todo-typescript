@@ -1,11 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 @import './variables';
 @import './mixins';
 @import './reset.scss';
 @import './app.scss';
 
 * {
-	font-family: Roboto;
+	font-family: 'Inter', sans-serif;
 	color: $secondary;
 }
 
@@ -21,13 +20,14 @@
 	width: 100vw;
 
 	background: linear-gradient(
-		323deg,
+		320deg,
 		rgba(203, 163, 255, 1) 0%,
-		rgb(113, 195, 215) 46%,
-		rgba(97, 108, 190, 1) 100%
+		rgb(113, 195, 215) 33.3%,
+		rgb(248, 146, 194) 66.6%,
+		rgb(117, 128, 212) 100%
 	);
-	background-size: 1400% 100%;
-	animation: gradientAnimation 10s ease infinite alternate;
+	background-size: 1000% 100%;
+	animation: gradientAnimation 7s ease infinite alternate;
 }
 
 @keyframes gradientAnimation {

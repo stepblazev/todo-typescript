@@ -57,15 +57,34 @@
 	flex-direction: column;
 
 	&__logo {
+		@include slideInRight(0s);
 		flex-grow: 1;
 		margin-right: 20px;
 		padding: 5px;
-		font-size: 50px;
-		line-height: 1;
-		@include slideInRight(0s);
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		span {
+			font-size: 50px;
+			line-height: 1;
+
+			@media (max-width: $breakpoint700) {
+				display: none;
+			}
+		}
+
+		svg {
+			width: 40px;
+			height: 40px;
+
+			@media (max-width: $breakpoint700) {
+				width: 30px;
+				height: 30px;
+			}
+		}
 
 		@media (max-width: $breakpoint700) {
-			font-size: 24px;
 			margin-right: 0;
 		}
 	}
